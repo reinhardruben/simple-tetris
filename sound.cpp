@@ -3,7 +3,7 @@
 sound::sound()
 {
     this->soundSample[GAME_SOUND_STONED] = load_sample("stoned.wav");
-    this->soundSample[GAME_SOUND_DESTROY_LINE] = load_sample("destroy_line.wav");
+    this->soundSample[GAME_SOUND_DESTROY_LINE] = load_sample("destory_line.wav");
     this->soundSample[GAME_SOUND_BEGIN] = load_sample("begin.wav");
     this->soundSample[GAME_SOUND_MOVE] = load_sample("move.wav");
     this->soundSample[GAME_SOUND_ROTATE] = load_sample("rotate.wav");

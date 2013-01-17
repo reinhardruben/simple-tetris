@@ -121,8 +121,7 @@ void logic::gameLogicIteration()
         this->newShapeColor = this->nextShapeColor;
         this->newShape(nextShapeType);
 
-        //this->nextShapeType = rand() % 18;
-        this->nextShapeType = SHAPE_1A;
+        this->nextShapeType = rand() % 18;
         this->nextShapeColor = rand() % 5;
 
 
@@ -133,8 +132,7 @@ void logic::gameLogicIteration()
     // Step2: Collision detector and control receive goes here
         if(this->collideDetect())
         {
-            gameParent->gameControl->receiveControlLr();
-            gameParent->gameSound->playSound(GAME_SOUND_STONED);
+            //gameParent->gameControl->receiveControlLr();
             //cout << "Collision happened" << endl;
             this->setAllStoned();
             this->gameState = GAME_STATE_NEWSHAPE_COMEOUT;
@@ -142,6 +140,10 @@ void logic::gameLogicIteration()
             canGoDown = false;
             // Step0 Destory line if occur
             this->destroyLine();
+            if(!this->destroyLine())
+            {
+                gameParent->gameSound->playSound(GAME_SOUND_STONED);
+            }
             // Step0 Game Over if above canvas
             this->gameOverDetection();
 
@@ -160,7 +162,7 @@ void logic::gameLogicIteration()
             gameParent->gameControl->receiveControl();
             if(this->collideDetect())
             {
-                gameParent->gameControl->receiveControlLr();
+                //gameParent->gameControl->receiveControlLr();
                 //cout << "Collision happened" << endl;
                 this->setAllStoned();
                 this->gameState = GAME_STATE_NEWSHAPE_COMEOUT;
@@ -1763,7 +1765,7 @@ void logic::rotateShape()
 
 
 
-void logic::destroyLine()
+bool logic::destroyLine()
 {
 
     int checkBlockX,checkBlockY,checkBlock,redrawBlockY,redrawBlockX,scoreDestroy;
@@ -1787,6 +1789,7 @@ void logic::destroyLine()
         checkBlockX = GAME_MAX_X;
         if(checkBlock == GAME_MAX_X)
         {
+            gameParent->gameSound->playSound(GAME_SOUND_DESTROY_LINE);
             scoreDestroy = counter * GAME_SCORE_DESTROY;
             cout<<" "<<counter;
             counter++;
@@ -1818,7 +1821,7 @@ void logic::destroyLine()
         }
     }
 
-
+return 1;
 }
 
 void logic::gameOverDetection()

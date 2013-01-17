@@ -30,7 +30,7 @@ private:
     void goDown();
     void gameOverDetection();
 
-    void destroyLine();
+    bool destroyLine();
 
 public:
     void gameLogicIteration();
