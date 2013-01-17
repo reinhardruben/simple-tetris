@@ -112,6 +112,7 @@ void logic::gameLogicIteration()
 
 
     int tickSpeed = this->tickSpeed;
+    int a=2;
     bool canGoDown;
 
 
@@ -132,20 +133,30 @@ void logic::gameLogicIteration()
     // Step2: Collision detector and control receive goes here
         if(this->collideDetect())
         {
+            for(a>0;a--;)
+            {
+                    gameParent->gameControl->receiveControlLr();
+                    rest(10);
+            }
+            if(this->collideDetect())
+                {
+                    //cout << "Collision happened" << endl;
+                    this->setAllStoned();
+                    this->gameState = GAME_STATE_NEWSHAPE_COMEOUT;
+                    gameParent->gameScore->incScore(GAME_SCORE_STONED);
+                    canGoDown = false;
+                    // Step0 Destory line if occur
+                this->destroyLine();
+                gameParent->gameSound->playSound(GAME_SOUND_STONED);
+                // Step0 Game Over if above canvas
+                this->gameOverDetection();
+                }
+                else
+                {
+                    canGoDown = true;
+                }
             //gameParent->gameControl->receiveControlLr();
             //cout << "Collision happened" << endl;
-            this->setAllStoned();
-            this->gameState = GAME_STATE_NEWSHAPE_COMEOUT;
-            gameParent->gameScore->incScore(GAME_SCORE_STONED);
-            canGoDown = false;
-            // Step0 Destory line if occur
-            this->destroyLine();
-            if(!this->destroyLine())
-            {
-                gameParent->gameSound->playSound(GAME_SOUND_STONED);
-            }
-            // Step0 Game Over if above canvas
-            this->gameOverDetection();
 
         }
     while(tickSpeed--)
@@ -162,12 +173,19 @@ void logic::gameLogicIteration()
             gameParent->gameControl->receiveControl();
             if(this->collideDetect())
             {
-                //gameParent->gameControl->receiveControlLr();
-                //cout << "Collision happened" << endl;
-                this->setAllStoned();
-                this->gameState = GAME_STATE_NEWSHAPE_COMEOUT;
-                gameParent->gameScore->incScore(GAME_SCORE_STONED);
-                canGoDown = false;
+                gameParent->gameControl->receiveControlLr();
+                if(this->collideDetect())
+                {
+                    //cout << "Collision happened" << endl;
+                    this->setAllStoned();
+                    this->gameState = GAME_STATE_NEWSHAPE_COMEOUT;
+                    gameParent->gameScore->incScore(GAME_SCORE_STONED);
+                    canGoDown = false;
+                }
+                else
+                {
+                    canGoDown = true;
+                }
             }
             else
             {
